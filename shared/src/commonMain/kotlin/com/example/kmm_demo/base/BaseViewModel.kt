@@ -11,11 +11,20 @@ abstract class BaseViewModel {
 
     private val scope = CoroutineScope(coroutineContext)
 
+    private val _error = MutableStateFlow<Error?>(null)
+    val error: StateFlow<Error?> = _error
+
     private fun onError(coroutineContext: CoroutineContext?, throwable: Throwable) {
-        when (throwable) {
-            else -> {
-                println(throwable.toString())
-            }
+        scope.launch {
+            _error.emit(
+                when (throwable) {
+                    else -> {
+                        println(throwable)
+                        Error.None
+                    }
+                }
+            )
+            _error.emit(null) //reset error state
         }
     }
 
@@ -34,5 +43,11 @@ abstract class BaseViewModel {
     fun onClear() {
         scope.cancel()
     }
+
+}
+
+sealed class Error {
+
+    object None : Error()
 
 }

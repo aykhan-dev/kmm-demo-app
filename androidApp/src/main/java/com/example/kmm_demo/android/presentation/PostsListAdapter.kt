@@ -1,11 +1,10 @@
-package com.example.kmm_demo.android
+package com.example.kmm_demo.android.presentation
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.kmm_demo.android.databinding.ItemPostBinding
 import com.example.kmm_demo.pojo.PostPOJO
 
 class PostsListAdapter : RecyclerView.Adapter<PostViewHolder>() {
@@ -31,20 +30,23 @@ class PostsListAdapter : RecyclerView.Adapter<PostViewHolder>() {
 
 }
 
-class PostViewHolder private constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
+class PostViewHolder private constructor(
+    private val binding: ItemPostBinding
+) : RecyclerView.ViewHolder(binding.root) {
 
     companion object {
 
         fun buildIn(parent: ViewGroup): PostViewHolder {
             val inflater = LayoutInflater.from(parent.context)
-            return PostViewHolder(inflater.inflate(R.layout.item_post, parent, false))
+            val binding = ItemPostBinding.inflate(inflater, parent, false)
+            return PostViewHolder(binding)
         }
 
     }
 
-    fun bind(item: PostPOJO) = with(itemView) {
-        findViewById<TextView>(R.id.title).text = item.title
-        findViewById<TextView>(R.id.body).text = item.body
+    fun bind(item: PostPOJO) = with(binding) {
+        title.text = item.title
+        body.text = item.body
     }
 
 }
